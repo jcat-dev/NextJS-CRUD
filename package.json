@@ -1,0 +1,31 @@
+{
+  "name": "crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "formik": "2.2.9",
+    "mongoose": "6.7.2",
+    "next": "12.3.1",
+    "next-auth": "4.15.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-toastify": "9.1.1",
+    "yup": "0.32.11"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.2",
+    "@types/react": "18.0.21",
+    "eslint-config-next": "13.0.0",
+    "eslint-config-prettier": "8.5.0",
+    "typescript": "4.8.4"
+  }
+}
