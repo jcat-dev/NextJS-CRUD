@@ -1,12 +1,17 @@
 import mongoose from 'mongoose';
+const MONGOOSE_URL = process.env.MONGOOSE_URL_LOCAL
 
 const database = () => {
   try {
-    return mongoose.connect(process.env.MONGOOSE_URL_LOCAL)
+    if (MONGOOSE_URL) return mongoose.connect(MONGOOSE_URL)
+
+    throw new Error()
   } catch (error) {
     mongoose.connection.close(() => {
       console.log("BD closed.")
     })
+
+    return undefined
   }
 }
 
