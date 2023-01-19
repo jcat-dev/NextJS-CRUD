@@ -1,0 +1,74 @@
+.container {
+  width: 90%;
+  height: 100vh;
+  margin: auto;
+
+  display: flex;
+}
+
+.form-container {
+  width: min(350px, 100%);
+  margin: auto;
+  border: 1px solid var(--gray-color-1);
+
+  border-radius: 5px;
+  box-shadow: 0 0 10px 2.5px var(--gray-color-1);
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.title {
+  width: 100%;
+  margin: auto;
+  padding: 1.5em 0;
+
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.label {
+  width: 90%;
+  margin: 1em auto;
+}
+
+.label__input {
+  width: 100%;
+  padding: 0.5em 0;
+  border: none;
+  border-bottom: 2.5px solid var(--blue-color-2);
+
+  font-size: 1em;
+}
+
+.label__input--error {
+  border-bottom: 2.5px solid red;
+}
+
+.recovery-password {
+  width: 90%;
+  margin: auto;
+  padding: 0.5em 0;
+
+  text-align: end;
+  color: black;
+}
+
+.btn-submit {
+  width: 90%;
+  margin: 1em auto;
+  padding: 1em 0;
+  border: 1.5px solid var(--blue-color-2);
+
+  border-radius: 15px;
+  font-weight: bold;
+  color: var(--blue-color-2);
+  background-color: white;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: var(--blue-color-2);
+  color: white;
+}
