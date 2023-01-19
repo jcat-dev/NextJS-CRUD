@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap');
+@import url(./buttons.css);
+@import url(./form.css);
+@import url(./container.css);
+
+:root {
+  --blue-color-1: #2fbbef;
+  --blue-color-2: #0091ea;
+  --blue-color-3: #202641;
+  
+  --gray-color-1: #e0e0e0;
+
+  --plan-z-index: 0;
+  --nav-z-index: 100;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input, select, textarea {
+  outline: none;
+}
+
+ul {
+  list-style: none;
+}

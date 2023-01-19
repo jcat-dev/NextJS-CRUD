@@ -1,0 +1,14 @@
+.container-w600f {
+  width: min(600px, 100%);
+  margin: 0 auto;
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.container-w400 {
+  width: min(400px, 100%);
+  margin: 0 auto;
+}
+
+

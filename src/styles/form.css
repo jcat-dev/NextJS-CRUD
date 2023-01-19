@@ -1,0 +1,46 @@
+.form__title {
+  width: 100%;
+  margin-bottom: 1em;
+
+  display: block;
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+}
+
+.form__label {
+  width: 100%;
+  margin: 1em auto;
+  display: block;
+}
+
+.form__label-title {
+  display: block;
+  margin-bottom: 0.15em;
+}
+
+.form__input, .form__select {
+  width: 100%;
+  padding: 0.25em;
+  border-width: 1px;
+
+  border-radius: 2.5px;
+  display: block;
+}
+
+.form__textarea {
+  width: 100%;
+  min-height: 150px;
+  resize: none;
+}
+
+/*---------------------------------------------------------------*/
+
+.form__input--error, .form__select--error, .form__textarea--error {
+  border: 1px solid red;
+}
+
+.form__label--w45 {
+  width: 45%;
+}
+
