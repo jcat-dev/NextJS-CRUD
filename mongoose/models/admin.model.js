@@ -12,7 +12,7 @@ const adminSchema = Schema({
     required: [true, `Surname ${text}`]
   },
   birthday: {
-    type: String,
+    type: Date,
     required: [true, `Birthday ${text}`]
   },
   email: {
