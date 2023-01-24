@@ -1,0 +1,137 @@
+.nav-container {
+  display: flex;
+  padding: 0 5%;
+  padding-top: 5vh;
+
+  font-weight: bolder;
+  font-size: 1.15em;
+
+  background-color: var(--blue-color-3);
+  color: white;
+}
+
+.navbar-container {
+  width: 70%;
+
+  display: flex;
+  gap: 10px;
+}
+
+.user-container {
+  width: 30%;
+
+  position: relative;
+  z-index: var(--nav-z-index);
+}
+
+/*-----------------------------------------------------------------------*/
+
+.item {
+  position: relative;  
+  z-index: var(--nav-z-index);
+  cursor: pointer;
+}
+
+.item-title {
+  padding: 0.5em 0.5em 5vh 0;
+
+  display: block;
+  letter-spacing: 0.05em;
+}
+
+.item-title:hover {
+  color: var(--blue-color-1);
+}
+
+.item-title:hover ~ ul, .item-title ~ ul:hover {
+  display: block;
+}
+
+.item-links {
+  width: calc(5vw + 100%);
+  border-top: 2px solid white;
+  margin-left: -5vw;
+
+  display: none;
+  position: absolute;
+  background-color: var(--blue-color-3);
+}
+
+.link {
+  width: 100%;
+  padding: 1em;
+  padding-left: 5vw;
+  border: 2px solid transparent;
+
+  display: block;
+  font-weight: normal;
+}
+
+.link:hover {
+  border: 2px solid var(--blue-color-2);
+  border-left: none;
+  border-right: none;
+
+  color: var(--blue-color-1)
+}
+
+/*-----------------------------------------------------------------------*/
+
+.user-title {
+  width: 100%;
+  padding: 0.5em 0 5vh 0;
+  
+
+  display: block;
+  text-transform: capitalize;
+  text-align: end;
+  cursor: default;
+}
+
+.user-title:hover ~ .user-data, .user-data:hover {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user-data {
+  width: 100%;
+  border-top: 1px solid white;
+  margin-left: 5vw;
+
+  display: none;
+  position: absolute;
+  background-color: var(--blue-color-3);
+  cursor: inherit;  
+}
+
+.user-name {
+  text-transform: capitalize;
+}
+
+.user-name, .user-email {
+  width: 75%;
+  margin: 0.5em auto;
+
+  display: block;
+  overflow: auto;
+}
+
+.user-logout {
+  width: 75%;
+  padding: 0.5em;
+  margin: 0.5em auto;
+  border: 1px solid white;
+  
+  display: block;
+  background-color: inherit;
+  color: inherit;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: bolder;
+}
+
+.user-logout:hover {
+  border: 1px solid var(--blue-color-3);
+  color: var(--blue-color-3);
+  background-color: white;
+}
