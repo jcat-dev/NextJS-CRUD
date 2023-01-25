@@ -1,6 +1,6 @@
 export interface FetchResponse {
   msg: string
-  status: string
+  status: string | null
 }
 
 export interface GetFetchResponse<T> extends FetchResponse {
