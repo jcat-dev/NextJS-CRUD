@@ -38,7 +38,7 @@ const Navbar: React.FC<Props> = (Props) => {
                 href={"/dashboard/new-adm"} 
                 className={styles.link}
               >
-                Coach
+                Admin
               </Link>
             </li>
 
