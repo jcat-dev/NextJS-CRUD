@@ -1,18 +1,16 @@
 import mongoose from 'mongoose';
 const MONGOOSE_URL = process.env.MONGOOSE_URL_LOCAL
 
-const database = () => {
-  try {
-    if (MONGOOSE_URL) return mongoose.connect(MONGOOSE_URL)
-
-    throw new Error()
-  } catch (error) {
-    mongoose.connection.close(() => {
-      console.log("BD closed.")
-    })
-
-    return undefined
+const database = async () => {
+  if (MONGOOSE_URL) {
+    try {
+      return await mongoose.connect(MONGOOSE_URL)
+    } catch (error) {
+      mongoose.connection.close(() => console.log("BD closed."))
+    }
   }
+
+  return undefined 
 }
 
 export default database
