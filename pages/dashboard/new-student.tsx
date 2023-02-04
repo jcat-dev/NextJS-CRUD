@@ -1,4 +1,3 @@
-import VerifyAuthorization from "@/src/components/VerifyAuthorization"
 import database from "@/mongoose/database"
 import PlanModel from "@/mongoose/models/plan.model"
 import {Field, Form, Formik, FormikHelpers } from "formik"
@@ -6,6 +5,7 @@ import { Plan } from "@/src/types/plan"
 import { setFetch } from "@/src/utils/fetch"
 import { toast } from "react-toastify"
 import { getDate } from "@/src/utils/date"
+import Admin from "@/src/components/dashboarVerification/Admin"
 import * as Yup from "yup"
 
 interface FormValues {
@@ -73,9 +73,7 @@ const NewStudent: React.FC<Props> = ({ plan }) => {
   }
 
   return (
-    <VerifyAuthorization
-      role="admin"
-    >
+    <Admin>
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object(validationSchema)}
@@ -175,7 +173,7 @@ const NewStudent: React.FC<Props> = ({ plan }) => {
           </Form>
         }
       </Formik>
-    </VerifyAuthorization>
+    </Admin>
   )
 }
 

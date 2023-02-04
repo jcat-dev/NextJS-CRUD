@@ -1,4 +1,4 @@
-import Unauthorized from "@/src/components/Unauthorized"
+import Unauthorized from "@/src/components/errors/Unauthorized"
 import { useSession } from "next-auth/react"
 import NewUser from "./new-user"
 import Student from "./student"

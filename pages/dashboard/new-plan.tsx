@@ -1,13 +1,11 @@
-import VerifyAuthorization from "@/src/components/VerifyAuthorization"
+import Admin from "@/src/components/dashboarVerification/Admin"
 import Plan from "@/src/components/Plan"
 
 const NewPlan: React.FC = () => { 
   return (
-    <VerifyAuthorization
-      role="admin"
-    >
+    <Admin>
       <Plan type={"createPlan"} />
-    </VerifyAuthorization>
+    </Admin>
   )
 }
 

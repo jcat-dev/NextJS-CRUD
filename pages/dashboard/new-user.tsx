@@ -1,5 +1,4 @@
 import FormNewUser from "@/src/components/FormNewUser"
-import VerifyAuthorization from "@/src/components/VerifyAuthorization"
 import { Admin, Student } from "@/src/types/person"
 import { Role } from "@/src/types/role"
 import { SearchUser } from "@/src/types/user"
@@ -7,6 +6,7 @@ import { getFetch } from "@/src/utils/fetch"
 import { Field, Form, Formik } from "formik"
 import { useState } from "react"
 import { toast } from "react-toastify"
+import AdminComponent from "@/src/components/dashboarVerification/Admin"
 import * as Yup from "yup"
 
 interface FormValues {
@@ -66,9 +66,7 @@ const NewUser: React.FC = () => {
   }
 
   return (
-    <VerifyAuthorization
-      role="admin"
-    >
+    <AdminComponent>
       <Formik
         initialValues = {initialValues}
         validationSchema = {Yup.object(validationSchema)}
@@ -131,7 +129,7 @@ const NewUser: React.FC = () => {
           handleResetUser={handleResetUser}
         />  
       } 
-    </VerifyAuthorization>
+    </AdminComponent>
   )
 }
 

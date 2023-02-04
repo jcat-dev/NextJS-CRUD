@@ -1,9 +1,9 @@
-import VerifyAuthorization from "@/src/components/VerifyAuthorization"
 import { getDate } from "@/src/utils/date"
 import { Field, Form, Formik, FormikHelpers } from "formik"
 import { toast } from "react-toastify"
 import { setFetch } from "@/src/utils/fetch"
 import * as Yup from "yup"
+import Admin from "@/src/components/dashboarVerification/Admin"
 
 interface FormValues {
   name: string
@@ -60,9 +60,7 @@ const NewAdm: React.FC = () => {
   }
 
   return (
-    <VerifyAuthorization 
-      role="admin"
-    >
+    <Admin>
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object(validationSchema)}
@@ -142,7 +140,7 @@ const NewAdm: React.FC = () => {
           </Form>
         }
       </Formik>
-    </VerifyAuthorization>
+    </Admin>
   )
 }
 
