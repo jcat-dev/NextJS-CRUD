@@ -1,0 +1,41 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  padding: 5vw;
+
+  display: grid;
+  grid-template-columns: 0.35fr 0.65fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: 
+    "error title"
+    "error text";
+
+  align-content: center;
+  align-items: end;
+  overflow: auto;
+}
+
+.error {
+  grid-area: error;
+
+  font-size: 10em;
+  text-align: center;
+}
+
+.title {
+  grid-area: title;
+
+  font-size: 5em;
+}
+
+.text {
+  grid-area: text;
+
+  font-size: 1.5em;
+}
+
+.link {
+  padding-left: 1em;
+  color: darkcyan;
+  font-weight: bolder;
+}
