@@ -1,13 +1,14 @@
-import VerifyAuthorization from "@/src/components/VerifyAuthorization"
 import database from "@/mongoose/database"
 import planModel from "@/mongoose/models/plan.model"
 import { Plan } from "@/src/types/plan"
 import { setFetch } from "@/src/utils/fetch"
 import { useRouter } from "next/router"
 import styles from "@/src/styles/module/Plan.module.css"
+import Admin from "@/src/components/dashboarVerification/Admin"
+import InternalServerError from "@/src/components/errors/InternalServerError"
 
 interface Props {
-  plan: Plan[]
+  plan: Plan[] | []
 }
 
 const Plan: React.FC<Props> = ({ plan }) => {
@@ -18,16 +19,25 @@ const Plan: React.FC<Props> = ({ plan }) => {
     
     if (res) return router.push("/dashboard/plan")
   }
+  
+  const editPlan = (id: string) => router.push({
+    pathname: "/dashboard/plan/[id]",
+    query: { id }
+  })
 
-  const editPlan = (id: string) => router.push(`/dashboard/plan/${id}`)
+  if (plan.length === 0) {
+    return (
+      <Admin>
+        <InternalServerError />
+      </Admin>
+    )
+  }
 
   return (
-    <VerifyAuthorization 
-      role="admin" 
-    >
-      <span className={styles.title}>Plan</span>
+    <Admin>
+      <span className={styles.title} >Plan</span>
 
-      <ul>
+      <ul className={styles.container} >
         {          
           plan.map((value) =>           
             <li 
@@ -59,16 +69,18 @@ const Plan: React.FC<Props> = ({ plan }) => {
           )
         }
       </ul>
-    </VerifyAuthorization>
+    </Admin>
   )
 }
 
 export default Plan
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const db = await database()
 
   try {
+    if(!db) throw new Error()
+
     const data = await planModel.find({})
     const plan: Plan[] = JSON.parse(JSON.stringify(data))
 
