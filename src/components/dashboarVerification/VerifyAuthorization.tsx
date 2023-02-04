@@ -1,9 +1,9 @@
 import { useSession } from "next-auth/react"
-import Navbar from "./Navbar"
-import Unauthorized from "./Unauthorized"
+import Navbar from "../Navbar"
+import Unauthorized from "../errors/Unauthorized"
 import styles from "@/src/styles/module/VerifyAuthorization.module.css"
 import { ToastContainer } from "react-toastify"
-import { Role } from "../types/role"
+import { Role } from "../../types/role"
 
 interface Props {
   role: Role
