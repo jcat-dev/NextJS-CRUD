@@ -1,71 +1,52 @@
-import VerifyAuthorization from "@/src/components/VerifyAuthorization"
-import { Plan } from "@/src/types/plan"
 import PlanComponent from "@/src/components/Plan"
-import database from "@/mongoose/database"
-import planModel from "@/mongoose/models/plan.model"
+import PlanIDSkeleton from "@/src/components/skeletons/PlanIDSkeleton"
+import { Plan }  from "@/src/types/plan"
+import { useRouter } from "next/router"
+import useSWR, { Fetcher } from "swr"
+import { GetFetchResponse } from "@/src/types/response"
+import Admin from "@/src/components/dashboarVerification/Admin"
+import InternalServerError from "@/src/components/errors/InternalServerError"
 
 interface Props {
   plan: Plan
 }
 
-const Plan: React.FC<Props> = ({ plan }) => {
+const fetcher: Fetcher<GetFetchResponse<Plan>, string> = (...args) => fetch(...args).then(res => res.json())
+
+const Plan: React.FC<Props> = () => {
+  const router = useRouter()
+  const API = `/api/adm/plan/${router.query.id}`
+  const { 
+    data: plan, 
+    isLoading,
+    error,
+    isValidating    
+  } = useSWR(API, fetcher, { revalidateOnFocus: false })
+
+  if (error || !plan) {
+    return (
+      <Admin>
+        <InternalServerError />
+      </Admin>
+    )
+  }
+
+  if (isLoading || isValidating) {
+    return (
+      <Admin>
+        <PlanIDSkeleton />
+      </Admin>    
+    )
+  }
+  
   return (
-    <VerifyAuthorization 
-      role="admin"
-    >
+    <Admin>
       <PlanComponent 
         type={"updatePlan"}
-        plan={ plan }      
+        plan={plan.data}      
       />
-    </VerifyAuthorization>
+    </Admin>
   )
 }
 
 export default Plan
-
-export async function getStaticPaths() {
-  const db = await database()
-
-  try {    
-    const data: Plan[] = await planModel.find({})
-
-    const paths = data.map((value) => ({
-      params: { id: value._id.toString() }
-    }))
-    
-    return {
-      paths,
-      fallback: false
-    }
-  } catch (error) {
-    return {
-      paths: [{ params: { id: "" } }],
-      fallback: false
-    }
-  } finally {
-    db?.disconnect(() => console.log("BD disconnected."))
-  }
-}
-
-export async function getStaticProps({ params }: any) {  
-  const db = await database()
-
-  try {
-    const data = await planModel.findById(params.id)
-    const plan = JSON.parse(JSON.stringify(data))
-
-    return {
-      props: {
-        plan
-      }
-    }
-  } catch (error) {
-    return {
-      props: {
-        plan: []
-      }
-    }
-  } finally {
-    db?.disconnect(() => console.log("BD disconnected."))
-  }
-}
