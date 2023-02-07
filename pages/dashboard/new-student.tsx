@@ -177,10 +177,12 @@ const NewStudent: React.FC<Props> = ({ plan }) => {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const db = await database()
 
   try {
+    if (!db) throw new Error()
+
     const data = await PlanModel.find({})
     const plan: Plan[] = JSON.parse(JSON.stringify(data))
 
