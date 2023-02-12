@@ -13,46 +13,121 @@
 
   border-radius: 5px;
   box-shadow: 0 0 10px 2.5px var(--gray-color-1);
-
-  display: flex;
-  flex-wrap: wrap;
+  position: relative;
 }
 
 .title {
   width: 100%;
   margin: auto;
-  padding: 1.5em 0;
+  padding: 1.5em 1.5em 1em 1.5em;
 
+  display: block;
   font-size: 2em;
   font-weight: bold;
   text-align: center;
+  letter-spacing: 0.1em;
+}
+
+.helper {
+  width: 1.5em;
+  height: 1.5em;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 100%;
+  background-color: var(--gray-color-1);
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  cursor: default;
+}
+
+.helper-text {
+  display: none;
+
+  width: max-content;
+  padding: 1em;
+  border: 1px solid var(--gray-color-1);
+
+  background-color: white;
+  position: absolute;
+  left: 125%;
+}
+
+.helper:hover > .helper-text {
+  display: block;
+}
+
+.field {
+  width: 90%;
+  margin: 2em 5%;
+
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  height: 3.5em;
+  padding: 0.5em 1em;
+  border: none;
+  border-bottom: 1.5px solid var(--blue-color-2);
+
+  font-size: 1em;
+  background-color: rgb(232, 240, 254);
+  transition: 0.5s;
+}
+
+.input--bg-error {
+  background-color: rgba(255, 0, 0, 0.1);
 }
 
 .label {
-  width: 90%;
-  margin: 1em auto;
+  padding: 0.5em 1em;
+
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: 0.5s;
 }
 
-.label__input {
-  width: 100%;
-  padding: 0.5em 0;
-  border: none;
-  border-bottom: 2.5px solid var(--blue-color-2);
+.input:focus ~ .label, .label--active {
+  width: fit-content;
+  height: 2em;
+  margin-left: 1em;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  padding: 0 10px;
+  top: -1em;
 
-  font-size: 1em;
+  font-size: 0.7em;
+  font-weight: bold;
+  letter-spacing: 0.25em;
 }
 
-.label__input--error {
-  border-bottom: 2.5px solid red;
+.label--success {
+  color: var(--blue-color-2);
+  background-color: white;
+}
+
+.label--error {
+  color: red;
+  background-color: white;
 }
 
 .recovery-password {
-  width: 90%;
-  margin: auto;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 5%;
   padding: 0.5em 0;
 
   text-align: end;
   color: black;
+  display: block;
 }
 
 .btn-submit {
@@ -61,11 +136,15 @@
   padding: 1em 0;
   border: 1.5px solid var(--blue-color-2);
 
+  display: block;
   border-radius: 15px;
   font-weight: bold;
   color: var(--blue-color-2);
   background-color: white;
   cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: 0.1em;
 }
 
 .btn-submit:hover {

@@ -53,35 +53,82 @@ const Login: React.FC = () => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={(values) => handleSubmit(values)}
       >
-        {({ errors, touched, isValid, dirty }) => 
+        {({ errors, touched, isValid, dirty, values }) => 
           <Form className={styles["form-container"]} >
             <span className={styles.title} >
               LOG IN
             </span>
 
-            <label className={styles.label} >
+            <div className={styles.helper} >
+              ?
+
+              <p className={styles["helper-text"]} >
+                  try admin@gmai.com/admin              
+              </p>
+            </div>
+
+            <div 
+              className={styles.field}
+            >
               <Field 
-                className={(errors.email && touched.email) ? `${styles.label__input} ${styles["label__input--error"]}` : styles.label__input}
+                className={
+                  (errors.email && touched.email) 
+                  ? `${styles.input} ${styles["input--error"]} ${styles["input--bg-error"]}`
+                  : `${styles.input}`
+                }
                 name="email"
                 type="email"
-                placeholder="Your email"
+                autoComplete="off"
               />
-            </label>
 
-            <label className={styles.label} >
+              <label 
+                className={
+                  (values.email)
+                  ? (errors.email)
+                    ? `${styles.label} ${styles["label--active"]} ${styles["label--error"]}` 
+                    : `${styles.label} ${styles["label--active"]} ${styles["label--success"]}` 
+                  : styles.label 
+                } 
+
+                htmlFor="email"
+              >
+                Your Email
+              </label>
+            </div>       
+
+            <div
+              className={styles.field}
+            > 
               <Field 
-                className={(errors.password && touched.password) ? `${styles.label__input} ${styles["label__input--error"]}` : styles.label__input}
+                className={
+                  (errors.password && touched.password) 
+                  ? `${styles.input} ${styles["input--error"]} ${styles["input--bg-error"]}` 
+                  : `${styles.input}`
+                }
                 name="password"  
-                type="password" 
-                placeholder="Your password" 
+                type="password"              
               />
-            </label>
 
+              <label 
+                className={
+                  (values.password)
+                  ? (errors.password)
+                    ? `${styles.label} ${styles["label--active"]} ${styles["label--error"]}` 
+                    : `${styles.label} ${styles["label--active"]} ${styles["label--success"]}` 
+                  : styles.label 
+                }
+
+                htmlFor="password"
+              >
+                Your password
+              </label>
+            </div>
+            
             <Link
               href="/login/recovery-password"
               className={styles["recovery-password"]}
             >
-              Forgot<b>Password?</b>
+              Forgot <b>Password?</b>
             </Link>
                   
             <button 
