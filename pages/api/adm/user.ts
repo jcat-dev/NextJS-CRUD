@@ -1,7 +1,6 @@
-import { saveData } from "@/mongoose/controllers/save.controller";
-import userModel from "@/mongoose/models/user.model";
+import { saveUser } from "@/mongoose/controllers/user.controller";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  return saveData(userModel, req, res)
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  return await saveUser(req, res)
 }
