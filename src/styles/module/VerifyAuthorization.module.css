@@ -1,6 +1,6 @@
 .container {
   width: max(250px, 90%);
-  margin: 10vh auto;
+  margin: 0vh auto;
 
   display: flex;
   flex-wrap: wrap;
