@@ -60,65 +60,6 @@
   display: block;
 }
 
-.field {
-  width: 90%;
-  margin: 2em 5%;
-
-  position: relative;
-}
-
-.input {
-  width: 100%;
-  height: 3.5em;
-  padding: 0.5em 1em;
-  border: none;
-  border-bottom: 1.5px solid var(--blue-color-2);
-
-  font-size: 1em;
-  background-color: rgb(232, 240, 254);
-  transition: 0.5s;
-}
-
-.input--bg-error {
-  background-color: rgba(255, 0, 0, 0.1);
-}
-
-.label {
-  padding: 0.5em 1em;
-
-  position: absolute;
-  inset: 0;
-
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-  transition: 0.5s;
-}
-
-.input:focus ~ .label, .label--active {
-  width: fit-content;
-  height: 2em;
-  margin-left: 1em;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  padding: 0 10px;
-  top: -1em;
-
-  font-size: 0.7em;
-  font-weight: bold;
-  letter-spacing: 0.25em;
-}
-
-.label--success {
-  color: var(--blue-color-2);
-  background-color: white;
-}
-
-.label--error {
-  color: red;
-  background-color: white;
-}
-
 .recovery-password {
   width: fit-content;
   margin-left: auto;
