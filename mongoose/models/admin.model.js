@@ -21,7 +21,7 @@ const adminSchema = Schema({
     unique: true
   },
   dni: {
-    type: String,
+    type: Number,
     required: [true, `DNI ${text}`],
     unique: true
   },
