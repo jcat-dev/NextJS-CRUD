@@ -1,14 +1,16 @@
-import { Formik, Form, Field, FormikHelpers } from "formik"
-import { getPassword } from "../utils/getPassword"
+import { Formik, Form } from "formik"
 import { setFetch } from "../utils/fetch"
 import { toast } from "react-toastify"
 import { Role } from "../types/role"
-import { NewUser, SearchUser } from "../types/user"
+import { NewUser } from "../types/user"
 import * as Yup from "yup"
+import Input from "./FormWithFormik/Input"
+import email from "../typescript/YupValidator/email"
+import string from "../typescript/YupValidator/string"
 
 interface Props {
-  user: SearchUser
-  handleResetUser: () => void
+  newUser: NewUser
+  handleResetNewUser: () => void
 }
 
 interface FormValues {
@@ -17,50 +19,28 @@ interface FormValues {
   role: Role
 }
 
-const FormNewUser: React.FC<Props> = ({ user, handleResetUser }: Props) => {
+const FormNewUser: React.FC<Props> = ({ newUser, handleResetNewUser }: Props) => {
   const initialValues: FormValues = {
-    email: user.email,
-    password: getPassword(),
-    role: user.role
-  }
-
+    email: newUser.email,
+    password: newUser.password,
+    role: newUser.role
+  }  
+  
   const validationSchema = {
-    email: Yup.string()
-      .email()
-      .required(),
-    password: Yup.string()
-      .required(),
-    role: Yup.string()
-      .required()
+    email,
+    password: string,
+    role: string
   }
 
-  const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
+  const handleSubmit = async () => {
     const API = "/api/adm/user" 
-
-    let newUser: NewUser = {
-      email: values.email,
-      password: values.password,
-      role: values.role
-    }
+    const result = await setFetch("POST", API, newUser)
     
-    if (user.role === "admin") {
-      newUser = { ...newUser, admin: user._id }
-    }
-
-    if (user.role === "student") {
-      newUser = { ...newUser, student: user._id }
-    }
-
-    const result = await setFetch("POST", API, user)
-    
-    if (result) {
-      handleResetUser()
-      actions.resetForm()
-    }
+    if (result) handleResetNewUser()
   }
 
-  const handleFields = (isValid: boolean, dirty: boolean) => {
-    if (!isValid || !dirty) return toast.error("Required Field", {position: "bottom-right"})
+  const handleFields = (isValid: boolean) => {
+    if (!isValid) return toast.error("Required Field", {position: "bottom-right"})
   }
 
   return (
@@ -68,48 +48,49 @@ const FormNewUser: React.FC<Props> = ({ user, handleResetUser }: Props) => {
       enableReinitialize = {true}
       initialValues = {initialValues}
       validationSchema = {Yup.object(validationSchema)}
-      onSubmit = {(values, actions) => handleSubmit(values, actions)}
+      onSubmit = {() => handleSubmit()}
     > 
-      {({errors, dirty, isValid, touched}) => 
+      {({errors, isValid, touched, values}) => 
         <Form className="container-w400" >
           <span className="form__title" >Create New Account</span>
-          <label className="form__label" >
-            <span className="form__label-title" >Role</span>
-
-            <Field 
-              className={(errors.role && touched.role) ? "form__input form__input--error" : "form__input"}
-              name="role" 
-              type="text" 
-              disabled 
-            />
-          </label>
-                    
-          <label className="form__label" >
-            <span className="form__label-title" >Email</span>     
-
-            <Field 
-              className={(errors.email && touched.email) ? "form__input form__input--error" : "form__input"}
-              name="email" 
-              type="email" 
-              disabled
-            />
-          </label>
           
-          <label className="form__label" >
-            <span className="form__label-title" >Password</span>
+          <Input 
+            active={true}
+            error={Boolean(errors.role)}
+            fieldWidth="w-90"
+            name="role"
+            touched={Boolean(touched.role)}
+            type="text"
+            value={values.role}    
+            disabled={true}        
+          />
 
-            <Field 
-              className={(errors.password && touched.password) ? "form__input form__input--error" : "form__input"}
-              name="password" 
-              type="text" 
-              disabled 
-            />
-          </label>
+          <Input 
+            active={true}
+            error={Boolean(errors.email)}
+            fieldWidth="w-90"
+            name="email"
+            touched={Boolean(touched.email)}
+            type="email"
+            value={values.email}
+            disabled={true}
+          />
 
+          <Input 
+            active={true}
+            error={Boolean(errors.password)}
+            fieldWidth="w-90"
+            name="password"
+            touched={Boolean(touched.password)}
+            type="text"
+            value={values.email}
+            disabled={true}
+          />
+          
           <button 
             className="btn btn--w75"
             type="submit" 
-            onClick={() => handleFields(isValid, dirty)}
+            onClick={() => handleFields(isValid)}
           >
             Create
           </button>
@@ -117,7 +98,7 @@ const FormNewUser: React.FC<Props> = ({ user, handleResetUser }: Props) => {
           <button 
             className="btn btn--w75"
             type="button" 
-            onClick={() => handleResetUser()}
+            onClick={() => handleResetNewUser()}
           >
             Back
           </button>

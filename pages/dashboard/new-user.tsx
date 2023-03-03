@@ -1,65 +1,73 @@
 import FormNewUser from "@/src/components/FormNewUser"
 import { Admin, Student } from "@/src/types/person"
 import { Role } from "@/src/types/role"
-import { SearchUser } from "@/src/types/user"
 import { getFetch } from "@/src/utils/fetch"
-import { Field, Form, Formik } from "formik"
+import { ErrorMessage, Form, Formik } from "formik"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import AdminComponent from "@/src/components/dashboarVerification/Admin"
 import * as Yup from "yup"
+import { NewUser } from "@/src/types/user"
+import { getPassword } from "@/src/utils/password"
+import Input from "@/src/components/FormWithFormik/Input"
+import Select from "@/src/components/FormWithFormik/Select"
+import number from "@/src/typescript/YupValidator/number"
+import string from "@/src/typescript/YupValidator/string"
 
 interface FormValues {
-  dni: string
+  dni: number
   role: Role
 }
 
 const NewUser: React.FC = () => {
-  const [user, setUser] = useState<SearchUser>()
-  const [isUserFound, setIsUserFound] = useState<boolean>(false)
+  const [newUser, setNewUser] = useState<NewUser>()
+  const role: Role[] = [
+    "admin",
+    "student"
+  ]
 
   const initialValues: FormValues = {
-    dni: "",
+    dni: 0,
     role: "student"
   }
-
-  const validationSchema = {
-    dni: Yup.string()
-      .required(),
-    role: Yup.string()
-      .required()
-  }
   
-  const handleSubmit = async (values: FormValues) => {
+  
+  const validationSchema = {
+    dni: number,
+    role: string
+  }
+
+  const handleSubmit = (values: FormValues) => {
     const role = values.role
-    let API = ""
     
     if (role === "admin") {
-      API = `/api/adm/${values.dni}`
+      const api = `/api/adm/${values.dni}`
+      searchUser(api, role)
     }
     
     if (role === "student") {
-      API = `/api/student/${values.dni}`
-    }
+      const api = `/api/student/${values.dni}`
+      searchUser(api, role)
+    }    
+  }
 
-    const data = await getFetch<Admin | Student>(API)
-    
+  const searchUser = async (api: string, role: Role) => {
+    const data = await getFetch<Admin | Student>(api)
+
     if (data) {
       const { _id, email } = data
-
-      setIsUserFound(true)
-      setUser({
-        _id,
+      const newUser: NewUser = {
         email,
-        role
-      })
+        password: getPassword(),
+        role,
+      } 
+
+      if (role === "admin") setNewUser({...newUser, admin: _id})
+      if (role === "student") setNewUser({...newUser, student: _id})
     }
   }
 
-  const handleResetUser = () => {
-    setUser(undefined)
-    setIsUserFound(false)
-  }
+  const handleResetNewUser = () => setNewUser(undefined)
 
   const handleFields = (isValid: boolean, dirty: boolean) => {
     if (!isValid || !dirty) return toast.error("Required Fields", { position: "bottom-right" })
@@ -72,38 +80,52 @@ const NewUser: React.FC = () => {
         validationSchema = {Yup.object(validationSchema)}
         onSubmit = {(values) => handleSubmit(values)}
       >
-        {({ errors, touched, dirty, isValid, resetForm}) =>    
+        {({ errors, touched, dirty, isValid, resetForm, values}) =>    
           <Form 
             className="container-w400" 
-            hidden={isUserFound}  
+            hidden={Boolean(newUser)}  
           >
             <span className="form__title" >Search User</span>
 
-            <label className="form__label" >
-              <span className="form__label-title" >* DNI</span>
+            <Input 
+              active={true}
+              fieldWidth="w-90"
+              name="dni"
+              type="number"
+              value={String(values.dni)}
+              autoComplete="off"
+              error={Boolean(errors.dni)}
+              touched={Boolean(touched.dni)}              
+            >
+              {
+                values.dni
+                ? <p><ErrorMessage name="dni" /></p> 
+                : <p>without ( - ) and ( . )</p>
+              }  
+            </Input>
 
-              <Field 
-                className={(errors.dni && touched.dni) ? "form__input form__input--error" : "form__input"}
-                name="dni" 
-                type="text" 
-              />
-            </label>
+            <Select 
+              error={Boolean(errors.role)}
+              name={"role"}
+              touched={Boolean(touched.role)}
+              active={false}
+              fieldWidth="w-90"              
+            >
+              {
+                role.map((value, index) => (
+                  <option 
+                    key={index}
+                    value={value}
+                  >
+                    {value}
+                  </option>
+                ))
+              }
+            </Select>
 
-            <label className="form__label" >
-              <span className="form__label-title" >* Role</span>
-
-              <Field 
-                className={(errors.role && touched.role) ? "form__select form__select--error" : "form__select"}
-                name="role" 
-                as="select" 
-              >
-                <option value="admin" >Admin</option>
-                <option value="student" >Student</option>
-              </Field>
-            </label>
 
             <button 
-              className="btn btn--w75"
+              className="btn btn--w90"
               type="submit" 
               onClick={() => handleFields(isValid, dirty)}
             >
@@ -111,7 +133,7 @@ const NewUser: React.FC = () => {
             </button>
 
             <button 
-              className="btn btn--w75"
+              className="btn btn--w90"
               type="button" 
               onClick={() => resetForm()}
             >
@@ -122,11 +144,10 @@ const NewUser: React.FC = () => {
       </Formik>
 
       {
-        user && isUserFound && 
-        
+        newUser &&
         <FormNewUser 
-          user={user}
-          handleResetUser={handleResetUser}
+          newUser={newUser}
+          handleResetNewUser={handleResetNewUser}
         />  
       } 
     </AdminComponent>

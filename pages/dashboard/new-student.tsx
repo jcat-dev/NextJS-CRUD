@@ -1,16 +1,23 @@
 import database from "@/mongoose/database"
 import PlanModel from "@/mongoose/models/plan.model"
-import {Field, Form, Formik, FormikHelpers } from "formik"
+import {ErrorMessage, Form, Formik, FormikHelpers } from "formik"
 import { Plan } from "@/src/types/plan"
 import { setFetch } from "@/src/utils/fetch"
 import { toast } from "react-toastify"
 import { getDate } from "@/src/utils/date"
 import Admin from "@/src/components/dashboarVerification/Admin"
 import * as Yup from "yup"
+import email from "@/src/typescript/YupValidator/email"
+import phone from "@/src/typescript/YupValidator/phone"
+import Input from "@/src/components/FormWithFormik/Input"
+import Select from "@/src/components/FormWithFormik/Select"
+import date from "@/src/typescript/YupValidator/date"
+import number from "@/src/typescript/YupValidator/number"
+import string from "@/src/typescript/YupValidator/string"
 
 interface FormValues {
   birthday: string,
-  dni: string,
+  dni: number,
   email: string,
   name: string,
   phone: string,
@@ -25,40 +32,32 @@ interface Props {
 const NewStudent: React.FC<Props> = ({ plan }) => {
   const initialValues: FormValues = {
     birthday: "",
-    dni: "",
+    dni: 0,
     email: "",
     name: "",
     phone: "",
     surname: "",
     plan: ""
   }
-
-  const validationSchema = {
-    birthday: Yup.date()
-      .required(),
-    dni: Yup.string()
-      .required(),
-    email: Yup.string()
-      .email()
-      .required(),
-    name: Yup.string()
-      .required(),
-    phone: Yup.string()
-      .required(),
-    surname: Yup.string()
-      .required(),
-    plan: Yup.string()
-      .required()
+  
+  const validationSchema = {    
+    birthday: date,
+    dni: number,
+    email,
+    name: string,
+    phone,
+    surname: string,
+    plan: string,
   }
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues> ) => {
     const student = {
       birthday: getDate(values.birthday),
       dni: values.dni,
-      email: values.email,
-      name: values.name,
+      email: values.email.toLowerCase(),
+      name: values.name.toUpperCase(),
       phone: values.phone,
-      surname: values.surname,
+      surname: values.surname.toUpperCase(),
       plan: values.plan
     }
     
@@ -79,92 +78,110 @@ const NewStudent: React.FC<Props> = ({ plan }) => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={(values, actions) => handleSubmit(values, actions)}
       >
-        {({errors, touched, isValid, dirty}) => 
+        {({errors, touched, isValid, dirty, values}) => 
           <Form className="container-w600f" >
             <span className="form__title">New Student</span>
-
-            <label className="form__label form__label--w45" >
-              <span className="form__label-title">* Name</span>
-              <Field 
-                className={(errors.name && touched.name) ? "form__input form__input--error" : "form__input"}
-                name="name" 
-                type="text" 
-              />
-            </label>            
-
-            <label className="form__label form__label--w45" >
-              <span className="form__label-title" >* Surname</span>
-              <Field 
-                className={(errors.surname && touched.surname) ? "form__input form__input--error" : "form__input"}
-                name="surname" 
-                type="text" 
-              />
-            </label>
-
-            <label className="form__label form__label--w45" >
-              <span className="form__label-title">* DNI</span> 
-              <Field 
-                className={(errors.dni && touched.dni) ? "form__input form__input--error" : "form__input"}
-                name="dni" 
-                type="text" 
-              />
-            </label>            
-
-            <label className="form__label form__label--w45" >
-              <span className="form__label-title" >* Email</span>
-              <Field 
-                className={(errors.email && touched.email) ? "form__input form__input--error" : "form__input"}
-                name="email" 
-                type="text" 
-              />
-            </label>            
-
-            <label className="form__label form__label--w45" >
-              <span className="form__label-title" >* Birthday</span>
-              <Field 
-                className={(errors.birthday && touched.birthday) ? "form__input form__input--error" : "form__input"}
-                name="birthday" 
-                type="date" 
-              />
-            </label>
-
-            <label className="form__label form__label--w45" >
-              <span className="form__label-title" >* Phone</span>
-
-              <Field 
-                className={(errors.phone && touched.phone) ? "form__input form__input--error" : "form__input"}
-                name="phone" 
-                type="text" 
-              />
-            </label>
             
+            <Input 
+              active={false}
+              error={Boolean(errors.name)}
+              fieldWidth="w-45"
+              name="name"
+              touched={Boolean(touched.name)}
+              type="text"
+              value={values.name}
+              autoComplete="off"
+              textFormat="uppercase"
+            />
 
-            <label className="form__label form__label--w45" >
-              <span className="form__label-title" >* Plan</span>
+            <Input 
+              active={false}
+              error={Boolean(errors.surname)}
+              fieldWidth="w-45"
+              name="surname"
+              touched={Boolean(touched.surname)}
+              type="text"
+              value={values.surname}
+              autoComplete="off"
+              textFormat="uppercase"
+            />   
+            
+            <Input 
+              active={true}
+              error={Boolean(errors.dni)}
+              fieldWidth="w-45"
+              name="dni"
+              touched={Boolean(touched.dni)}
+              type="number"
+              value={String(values.dni)}
+              autoComplete="off"
+            >
+              {
+                values.dni
+                ? <p><ErrorMessage name="dni" /></p> 
+                : <p>without ( - ) and ( . )</p>
+              }    
+            </Input>
+            
+            <Input 
+              active={false}
+              error={Boolean(errors.email)}
+              fieldWidth="w-45"
+              name="email"
+              touched={Boolean(touched.email)}
+              type="email"
+              value={values.email}
+              autoComplete="off"
+              textFormat="lowercase"
+            />  
+            
+            <Input 
+              active={true}
+              error={Boolean(errors.birthday)}
+              fieldWidth="w-45"
+              name="birthday"
+              touched={Boolean(touched.birthday)}
+              type="date"
+              value={values.birthday}
+            />        
+            
+            <Input 
+              active={false}
+              error={Boolean(errors.phone)}
+              fieldWidth="w-45"
+              name="phone"
+              touched={Boolean(touched.phone)}
+              type="tel"
+              value={values.phone}
+              autoComplete="off"
+            >
+              <p>+xxxx-xxxxx-xxxx...</p>
+            </Input>
 
-              <Field 
-                className={(errors.plan && touched.plan) ? "form__select form__select--error" : "form__select"}
-                name="plan" 
-                as="select" 
-              >
-                <option hidden >Select a Plan</option>
+            <Select
+              active={true}
+              error={Boolean(errors.plan)}
+              fieldWidth="w-45"
+              name="plan"
+              touched={Boolean(touched.plan)}
+            >
+              <option hidden >Select a Plan</option>
 
-                {
-                  plan.map((value) => (
-                    <option
-                      key={value._id} 
-                      value={value._id} 
-                    >
-                      {value.title}
-                    </option>
-                  ))
-                }
-
-              </Field>
-            </label>            
+              {
+                plan.map((value) => (
+                  <option
+                    key={value._id} 
+                    value={value._id} 
+                  >
+                    {value.title}
+                  </option>
+                ))
+              }
+            </Select>    
+            <ErrorMessage name="plan" ></ErrorMessage>    
 
             <button 
-              className="btn btn--w75"
+              className="btn btn--w90"
               type="submit" 
               onClick={() => handleValidate(isValid, dirty)}
             >

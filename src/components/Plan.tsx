@@ -4,6 +4,8 @@ import { useRouter } from "next/router"
 import { toast } from "react-toastify"
 import { Plan } from "../types/plan"
 import * as Yup from "yup"
+import Input from "./FormWithFormik/Input"
+import string from "../typescript/YupValidator/string"
 
 interface FormValues {
   title: string
@@ -24,14 +26,16 @@ const Plan: React.FC<Props> = ({ plan, type }) => {
   }
   
   const validationSchema = {
-    text: Yup.string()
-      .required(),
-    title: Yup.string()
-      .required()
+    text: string,
+    title: string,
   }
 
   const handleCreatePlan = async (values: FormValues, actions: FormikHelpers<FormValues> ) => {
-    const result = await setFetch("POST", "/api/adm/plan", values)
+    const title = values.title
+    
+    const result = await setFetch("POST", "/api/adm/plan", {
+      ...values, title: title[0].toUpperCase().concat(title.slice(1).toLowerCase())
+    })
 
     if (result) return actions.resetForm()    
   }
@@ -64,27 +68,34 @@ const Plan: React.FC<Props> = ({ plan, type }) => {
         : (values) => handleUpdatePlan(values)
       }
     >
-      {({errors, touched, isValid, dirty}) => 
+      {({errors, touched, isValid, dirty, values}) => 
         <Form className="container-w400" >
           <span className="form__title" >New Plan</span>
           
-          <label className="form__label" >
-            <span className="form__label-title">* Title</span>
-            <Field 
-              className={(errors.title && touched.title) ? "form__input form__input--error" : "form__input"}
-              name="title" 
-              type="text" 
-            />
-          </label>
+          <Input 
+            active={false}
+            error={Boolean(errors.title)}
+            fieldWidth="w-90"
+            name="title"
+            touched={Boolean(touched.title)}
+            type="text"
+            value={values.title}
+            autoComplete="off"
+            textFormat="capitalize"
+          />
 
           <Field 
-            className={(errors.text && touched.text) ? "form__textarea form__textarea--error" : "form__textarea"}
+            className={
+              (errors.text && touched.text) 
+              ? "form__textarea form__textarea--error" 
+              : "form__textarea form"
+            }
             name="text" 
             as="textarea" 
           />
 
           <button 
-            className="btn btn--w50"
+            className="btn btn--w90"
             type="submit" 
             onClick={() => handleFields(isValid, dirty)}
           >
@@ -94,7 +105,7 @@ const Plan: React.FC<Props> = ({ plan, type }) => {
           </button>
           
           <button 
-            className="btn btn--w50 pointer"          
+            className="btn btn--w90 pointer"          
             onClick={handleChangeUrl}
             type="button"
             hidden={type === "createPlan"}
