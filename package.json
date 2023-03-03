@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "5.1.0",
     "formik": "2.2.9",
     "mongoose": "6.7.2",
     "next": "13.1.2",
@@ -23,6 +24,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
+    "@types/bcrypt": "5.0.0",
     "@types/node": "18.11.2",
     "@types/react": "18.0.21",
     "eslint-config-next": "13.1.2",
