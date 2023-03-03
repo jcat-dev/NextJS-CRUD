@@ -1,11 +1,13 @@
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/router"
 import { toast, ToastContainer } from "react-toastify"
-import { Field, Form, Formik } from "formik"
-import Link from "next/link"
+import { Form, Formik } from "formik"
 import * as Yup from "yup"
 import styles from "@/src/styles/module/Login.module.css"
 import "react-toastify/dist/ReactToastify.css"
+import Input from "@/src/components/FormWithFormik/Input"
+import email from "@/src/typescript/YupValidator/email"
+import string from "@/src/typescript/YupValidator/string"
 
 interface FormValues {
   email: string
@@ -21,24 +23,19 @@ const Login: React.FC = () => {
   }
 
   const validationSchema = {
-    email: Yup.string()
-      .email()
-      .required(),
-    password: Yup.string()
-      .required()
+    email,
+    password: string
   }
 
   const handleSubmit = async (values: FormValues) => {
     const data = await signIn('credentials', { 
       redirect: false, 
-      email: values.email,
+      email: values.email.toLowerCase(),
       password: values.password        
     })
 
-    if(data?.ok) {
-      return router.push("/dashboard")
-    }
-    
+    if(data?.ok) return router.push("/dashboard")
+        
     return toast.error("The Email/Password is wrong", { position: "bottom-right" })
   }
 
@@ -67,69 +64,28 @@ const Login: React.FC = () => {
               </p>
             </div>
 
-            <div 
-              className={styles.field}
-            >
-              <Field 
-                className={
-                  (errors.email && touched.email) 
-                  ? `${styles.input} ${styles["input--error"]} ${styles["input--bg-error"]}`
-                  : `${styles.input}`
-                }
-                name="email"
-                type="email"
-                autoComplete="off"
-              />
 
-              <label 
-                className={
-                  (values.email)
-                  ? (errors.email)
-                    ? `${styles.label} ${styles["label--active"]} ${styles["label--error"]}` 
-                    : `${styles.label} ${styles["label--active"]} ${styles["label--success"]}` 
-                  : styles.label 
-                } 
+            <Input 
+              active={false}
+              error={Boolean(errors.email)}
+              fieldWidth="w-90"
+              name="email"
+              touched={Boolean(touched.email)}
+              type="email"
+              value={values.email}
+              autoComplete="off"
+              textFormat="lowercase"
+            />
 
-                htmlFor="email"
-              >
-                Your Email
-              </label>
-            </div>       
-
-            <div
-              className={styles.field}
-            > 
-              <Field 
-                className={
-                  (errors.password && touched.password) 
-                  ? `${styles.input} ${styles["input--error"]} ${styles["input--bg-error"]}` 
-                  : `${styles.input}`
-                }
-                name="password"  
-                type="password"              
-              />
-
-              <label 
-                className={
-                  (values.password)
-                  ? (errors.password)
-                    ? `${styles.label} ${styles["label--active"]} ${styles["label--error"]}` 
-                    : `${styles.label} ${styles["label--active"]} ${styles["label--success"]}` 
-                  : styles.label 
-                }
-
-                htmlFor="password"
-              >
-                Your password
-              </label>
-            </div>
-            
-            <Link
-              href="/login/recovery-password"
-              className={styles["recovery-password"]}
-            >
-              Forgot <b>Password?</b>
-            </Link>
+            <Input 
+              active={false}
+              error={Boolean(errors.password)}
+              fieldWidth="w-90"
+              name="password"
+              touched={Boolean(touched.password)}
+              type="password"
+              value={values.password}
+            />               
                   
             <button 
               className={styles["btn-submit"]}
