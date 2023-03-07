@@ -60,7 +60,7 @@ const Login: React.FC = () => {
               ?
 
               <p className={styles["helper-text"]} >
-                  try admin@gmail.com/admin              
+                test.admin.1@gmail.com/uT5550Ywhl              
               </p>
             </div>
 
